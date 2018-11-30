@@ -8,46 +8,15 @@ Page({
     fairLevel:0,
     whiteningLevel:0,
     show: true,
+    showSet:false,
+    clarity:"RTC"
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let styles = [{
-        "select": 0
-      },
-      {
-        "select": 0
-      },
-      {
-        "select": 0
-      },
-      {
-        "select": 1
-      }
-    ];
-
-    let styles1 = [{
-        "type": "warn"
-      },
-      {
-        "type": "default",
-        "disabled": true,
-        "str":"暂停直播"
-      },
-      {
-        "type": "warn"
-      },
-      {
-        "type": "warn"
-      }
-    ];
-
-    this.setData({
-      styles: styles,
-      styles1: styles1
-    })
+ 
   },
 
   /** 
@@ -57,24 +26,37 @@ Page({
     let self = this;
 
     let show = self.data.show;
+    let showSet = self.data.showSet;
 
-    if (!show) {
-      let myInterval = self.data.myInterval;
-      clearInterval(myInterval);
-      let interval = setTimeout(function () {
-        self.setData({
-          show: false
-        })
-      }, 3000)
-      self.setData({
-        myInterval: interval
-      })
+    console.log(showSet)
+
+    if(showSet){
+      show = true;
+      showSet = false;
+    }else{
+      show = true;
     }
 
     self.setData({
-      show: !self.data.show
+      show: show,
+      showSet: showSet
     })
   },
+
+  /**
+   * 切换显示视频设置
+   */
+  myset:function(){
+    let self = this;
+    let showSet = self.data.showSet;
+
+
+    this.setData({
+      showSet: true,
+      show:false
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -128,82 +110,13 @@ Page({
     }
   },
 
-  changeType: function(e) {
-    let self = this;
-    let type = e.currentTarget.dataset.type;
-    let styles = [{
-        "select": 0
-      },
-      {
-        "select": 0
-      },
-      {
-        "select": 0
-      },
-      {
-        "select": 0
-      }
-    ];
-
-    styles[type - 1].select = 1;
-
-    self.setData({
-      styles: styles
-    })
-  },
-
-  changeType1: function(e) {
-    let self = this;
-
-    let click = e.currentTarget.dataset.click;
-    let styles1 = self.data.styles1;
-
-    switch (click) {
-      //点击开始直播
-      case "1":
-        if (styles1[0].type == "warn") { //如果没有开始直播
-          styles1[1].type = "warn"
-          styles1[1].disabled = false;
-          styles1[0].type = "primary";
-        }else{
-          styles1[0].type = "warn";
-          styles1[1].disabled = true;
-          styles1[1].type = "default";
-        }
-        break;
-
-        //点击暂停直播
-      case "2":
-        if (styles1[1].type == "warn") { //如果没有开始直播
-          styles1[1].type = "primary";
-          styles1[1].str = "继续直播"
-        } else if (styles1[1].type == "primary") {
-          styles1[1].type = "warn"
-          styles1[1].str = "暂停直播"
-        }
-        break;
-
-        //点击切换摄像头
-      case "3":
-        if (styles1[2].type == "warn") { //如果没有开始直播
-          styles1[2].type = "primary";
-        } else {
-          styles1[2].type = "warn"
-        }
-        break;
-
-        //点击切换静音
-      case "4":
-        if (styles1[3].type == "warn") { //如果没有开始直播
-          styles1[3].type = "primary";
-        } else {
-          styles1[3].type = "warn"
-        }
-        break;
-    }
-
-    self.setData({
-      styles1: styles1
+  /**
+   * 改变清晰度
+   */
+  changeClarity:function(e){
+    let clarity =  e.currentTarget.dataset.clarity;
+    this.setData({
+      clarity:clarity
     })
   },
 
@@ -246,9 +159,21 @@ Page({
    * 设置美颜
    */
   setFair:function(e){
-    let set = e.currentTarget.dataset.set;
-    if(set == "0"){//点了减号
-      
+    let fair = e.currentTarget.dataset.fair;
+    let fairLevel = this.data.fairLevel;
+    
+    if (fair == "0" && fairLevel >0){//点了减号
+      fairLevel--;
+      this.setData({
+        fairLevel: fairLevel
+      })
+    }
+
+    if(fair == "1" && fairLevel < 9){
+      fairLevel++;
+      this.setData({
+        fairLevel: fairLevel
+      })
     }
   },
 
@@ -256,6 +181,22 @@ Page({
    * 设置美白
    */
   setWhitening:function(e){
+    let whitening = e.currentTarget.dataset.whitening;
+    let whiteningLevel = this.data.whiteningLevel;
 
-  }
+    if (whitening == "0" && whiteningLevel > 0) {//点了减号
+      whiteningLevel--;
+      this.setData({
+        whiteningLevel: whiteningLevel
+      })
+    }
+
+    if (whitening == "1" && whiteningLevel < 9) {
+      whiteningLevel++;
+      this.setData({
+        whiteningLevel: whiteningLevel
+      })
+    }
+  },
+
 })

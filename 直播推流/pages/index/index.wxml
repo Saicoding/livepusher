@@ -1,63 +1,67 @@
 <!--pages/index/index.wxml-->
-<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="RTC" autoplay bindtap="bindStart"  binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0">
+<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" bindtap="bindStart" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0">
   <!-- 控制条 -->
   <cover-view bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
     {{prompt}}
   </cover-view>
+
+  <!-- 视频质量 -->
+  <cover-view wx:if="{{showSet}}" class="set-container-model" >
+  </cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-460}}rpx;left:615rpx;">质量 :</cover-view>
+
+  <cover-view bindtap='changeClarity' data-clarity="SD" wx:if="{{showSet}}" class="set-btn" style="top:{{windowHeight-380}}rpx;left:630rpx;border:1rpx solid {{clarity=='SD'?'#ff7412':'rgb(209, 209, 209)'}}">标清</cover-view>
+  <cover-view bindtap='changeClarity' data-clarity="HD" wx:if="{{showSet}}" class="set-btn" style="top:{{windowHeight-300}}rpx;left:630rpx;border:1rpx solid {{clarity=='HD'?'#ff7412':'rgb(209, 209, 209)'}}">高清</cover-view>
+  <cover-view bindtap='changeClarity' data-clarity="FHD" wx:if="{{showSet}}" class="set-btn" style="top:{{windowHeight-220}}rpx;left:630rpx;border:1rpx solid {{clarity=='FHD'?'#ff7412':'rgb(209, 209, 209)'}}">超清</cover-view>
+  <cover-view bindtap='changeClarity' data-clarity="RTC" wx:if="{{showSet}}" class="set-btn" style="top:{{windowHeight-110}}rpx;left:602rpx;width:120rpx;border:1rpx solid {{clarity=='RTC'?'#ff7412':'rgb(209, 209, 209)'}}">实时直播</cover-view>
+
+
+  <!-- 美颜 -->
+
+  <cover-view wx:if="{{showSet}}" class="fair-btn1" style="top:{{windowHeight-285}}rpx;left:430rpx;font-size:25rpx;width:230rpx;"></cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-460}}rpx;left:500rpx;">美颜 :</cover-view>
+
+  <cover-view data-fair="0" bindtap='setFair' wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-380}}rpx;left:528rpx;font-size:45rpx;line-height:35rpx;">-</cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-285}}rpx;left:471rpx;font-size:25rpx;width:151rpx;height:41rpx;border:1rpx solid #ffc120;">{{fairLevel}}
+  </cover-view>:
+
+  <cover-view data-fair="1" bindtap='setFair' wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-189}}rpx;left:528rpx;font-size:30rpx;line-height:42+rpx;">+</cover-view>
+
+  <!-- 美白 -->
+
+  <cover-view wx:if="{{showSet}}" class="fair-btn1" style="top:{{windowHeight-285}}rpx;left:331rpx;font-size:25rpx;width:230rpx;"></cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-460}}rpx;left:400rpx;">美白 :</cover-view>
+
+  <cover-view data-whitening="0" bindtap='setWhitening' wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-380}}rpx;left:428rpx;font-size:45rpx;line-height:35rpx;">-</cover-view>
+  <cover-view wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-285}}rpx;left:371rpx;font-size:25rpx;width:151rpx;height:41rpx;border:1rpx solid #ffc120;">{{whiteningLevel}}</cover-view>
+  <cover-view data-whitening="1" bindtap='setWhitening' wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-189}}rpx;left:428rpx;font-size:30rpx;line-height:42+rpx;">+</cover-view>
+
+
   <!--  蒙版 -->
   <cover-view wx:if="{{show}}" class="model-opacity"></cover-view>
 
-  <cover-view wx:if="{{show}}" class="model" bindtap='test' >
-      <!--  设置按钮 -->
-    <cover-view bindtap="myset" class="set" >
+  <cover-view wx:if="{{show}}" class="model">
+    <!--  设置按钮 -->
+    <cover-view bindtap="myset" class="set">
       <cover-image class="set-img" src="/imgs/set1.png" mode="aspectFit"></cover-image>
     </cover-view>
     <!-- 退出按钮 -->
-    <cover-view bindtap="out"  class="back">
+    <cover-view bindtap="loginOut" class="back">
       <cover-image class="back-img" src="/imgs/back.png" mode="aspectFit"></cover-image>
     </cover-view>
-
   </cover-view>
+
+  <!--  在线人数 -->
+  <cover-view class="online-opacity"></cover-view>
+
+  <cover-image class="online-image" src = "/imgs/online.png" mode = "aspectFit"></cover-image>
+
+  <cover-view class ="online-text">12000</cover-view>
+ 
+
+
 </live-pusher>
-
-
-
-<!-- <live-pusher id ="pusher" class="pusher" object-fit="contain"  url="rtmp://push01.chinaplat.com/live/{{id}}" mode="RTC" bindtap="bindStart" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0" />
-<view class="container" style="height:750rpx;width:{{windowHeight}}rpx;margin-top:{{(windowHeight-750)/2}}rpx;margin-left:{{(750-windowHeight)/2}}rpx;transform:rotate(90deg) ">
-  <view class="left_box">
-    
-    <view class='control' style="height:{{750-windowHeight*0.65*9*0.96/16-750*0.06}}rpx">
-      <view class="control-line" style="padding-top:10rpx;">
-        <view class="btn" style="color:black">推流质量</view>
-        <view data-type="1" class="btn" bindtap="changeType" style="background:{{styles[0].select==0?'#ef4d4b':'#a3c91e'}}">标清</view>
-        <view data-type="2" class="btn" bindtap="changeType" style="background:{{styles[1].select==0?'#ef4d4b':'#a3c91e'}}">高清</view>
-        <view data-type="3" class="btn" bindtap="changeType" style="background:{{styles[2].select==0?'#ef4d4b':'#a3c91e'}}">超清</view>
-        <view data-type="4" class="btn" bindtap="changeType" style="background:{{styles[3].select==0?'#ef4d4b':'#a3c91e'}}">实时通话</view>
-      </view>
-      <view class="control-line" style="padding-top:30rpx;">
-        <view class="btn" style="color:black;border:1rpx solid #e6e6e6;">美颜</view>
-        <view class="fair-container">
-          <view data-set="0" class="fair" style="font-size:50rpx;" bindtap ="setFair">-</view>
-          <view class="fair" style="background:white">{{fairLevel}}</view>
-          <view data-set="1" class="fair" bindtap ="setFair">+</view>
-        </view>
-        <view class="btn" style="color:black;border:1rpx solid #e6e6e6;margin-left:200rpx;">美白</view>
-        <view class="fair-container">
-          <view data-set="0" class="fair" style="font-size:50rpx;" bindtap ="setWhitening">-</view>
-          <view class="fair" style="background:white">{{whiteningLevel}}</view>
-          <view data-set="1" class="fair" bindtap ="setWhitening">+</view>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <view class="right_box">
-    <view class="btn1" style="margin-top:4%">当前在线人数(12人)</view>
-    <button class="btn-right" data-click="1" bindtap="changeType1" type="{{styles1[0].type}}">{{styles1[0].type=="warn"?'开始直播':'停止直播'}}</button>
-    <button class="btn-right" data-click="2" bindtap="changeType1" type="{{styles1[1].type}}" disabled='{{styles1[1].disabled}}'>{{styles1[1].str}}</button>
-    <button class="btn-right" data-click="3" bindtap="changeType1" type="{{styles1[2].type}}">{{styles1[2].type=="warn"?'前摄像头':'后摄像头'}}</button>
-    <button class="btn-right" data-click="4" bindtap="changeType1" type="{{styles1[3].type}}">{{styles1[3].type=="warn"?'静音':'取消静音'}}</button>
-
-    <view class="btn1" style=" position: relative;bottom:-120rpx;border-radius:6rpx;" bindtap='loginOut'>退出登录</view>
-  </view>
-</view> -->

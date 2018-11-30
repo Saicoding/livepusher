@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login1/login1",
+    "pages/test"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffc126",
+    "navigationBarTitleText": "直播推流",
+    "navigationBarTextStyle": "white"
+  }
+}

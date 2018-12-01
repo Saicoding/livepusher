@@ -1,7 +1,7 @@
 <!--pages/index/index.wxml-->
-<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0" enable-camera muted="{{isVoiceOn}}" device-position ="back" bindstatechange = "stateChange" binderror ="error">
-  <!-- 控制条 -->
-  <cover-view bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
+<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0" enable-camera muted="{{isVoiceOn}}" device-position ="back" bindstatechange = "stateChange"   zoom = "{{true}}" bindnetstatus="netstatus">
+  <!-- 控制条 --> 
+  <cover-view wx:if="{{showModel}}" bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
     {{prompt}}
   </cover-view>
 
@@ -40,6 +40,19 @@
   <cover-view wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-285}}rpx;left:371rpx;font-size:25rpx;width:151rpx;height:41rpx;border:1rpx solid #ffc120;">{{whiteningLevel}}</cover-view>
   <cover-view data-whitening="1" bindtap='setWhitening' wx:if="{{showSet}}" class="fair-btn" style="top:{{windowHeight-189}}rpx;left:428rpx;font-size:30rpx;line-height:42+rpx;">+</cover-view>
 
+  <!-- 网络信息 -->
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:210rpx;width:300rpx;text-align:left">视频比特率 :    {{videoBitrate}}kbps</cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:160rpx;width:300rpx;text-align:left">音频比特率 :    {{audioBitrate}}kbps</cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:110rpx;width:300rpx;text-align:left">视频帧率 :    {{videoFPS}}fps</cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:60rpx;width:300rpx;text-align:left">视频GOP :    {{videoGOP}}s</cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:10rpx;width:300rpx;text-align:left">发送/接收速度 :    {{netSpeed}}k/s</cover-view>
+
+  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:-40rpx;width:300rpx;text-align:left">网络抖动 :    {{netJitter}}</cover-view>
+
 
   <!--  蒙版 -->
   <cover-view wx:if="{{show}}" class="model-opacity"></cover-view>
@@ -57,7 +70,7 @@
 
     <!-- 静音 -->
     <cover-view bindtap="setVoice" class="back">
-      <cover-image class="back-img" src="{{isVoiceOn?'/imgs/voice_off.png':'/imgs/voice_on.png'}}" mode="aspectFit"></cover-image>
+      <cover-image class="back-img" src="{{isVoiceOn?'/imgs/voice_on.png':'/imgs/voice_off.png'}}" mode="aspectFit"></cover-image>
     </cover-view>
 
     <!-- 退出按钮 -->
@@ -71,7 +84,7 @@
 
   <cover-image class="online-image" src="/imgs/online.png" mode="aspectFit"></cover-image>
 
-  <cover-view class="online-text">{{nums}} 人</cover-view>
+  <cover-view class="online-text">{{nums}}人</cover-view>
 
   <!-- 播放按钮 -->
 

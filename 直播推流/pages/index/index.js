@@ -17,6 +17,8 @@ Page({
     isPlaying:false,
     isPauseing:false,//是否暂停中
     isVoiceOn:true,//是否开启声音，默认开启
+    nums:0,//直播间人数
+    showModal:false,
   },
 
   /**
@@ -29,9 +31,11 @@ Page({
   /**
    * 直播状态改变时
    */
-
   stateChange:function(e){
     let code = e.detail.code;
+    this.setData({
+      showModal:true
+    })
 
     switch(code){
       case 1001:
@@ -78,14 +82,39 @@ Page({
       case 1006:
       case 1005:
         this.setData({
-          prompt: ""
+          prompt: "",
+          showModal:false,
         })
         break;
+
+        case -1307:
+        this.setData({
+          prompt: "网络断连"
+        })
         default:
         this.setData({
           prompt: code
         })
+        break;
     }
+  },
+  netstatus:function(e){
+    let info = e.detail.info;
+    let videoBitrate = info.videoBitrate;//当前视频编/码器输出的比特率，单位 kbps
+    let audioBitrate = info.audioBitrate;//当前音频编/码器输出的比特率，单位 kbps
+    let videoFPS = info.videoFPS;//当前视频帧率
+    let videoGOP = info.videoGOP;//当前视频 GOP,也就是每两个关键帧(I帧)间隔时长，单位 s
+    let netSpeed = info.netSpeed;//当前的发送/接收速度
+    let netJitter = info.netJitter;//网络抖动情况，抖动越大，网络越不稳定
+    
+    this.setData({
+      videoBitrate: videoBitrate,
+      audioBitrate: audioBitrate,
+      videoFPS: videoFPS,
+      videoGOP: videoGOP,
+      netSpeed: netSpeed,
+      netJitter: netJitter
+    })
   },
 
   /**
@@ -108,8 +137,6 @@ Page({
 
     let show = self.data.show;
     let showSet = self.data.showSet;
-
-    console.log(showSet)
 
     if(showSet){
       show = true;
@@ -143,6 +170,17 @@ Page({
    */
   onReady: function() {
     this.ctx = wx.createLivePusherContext('pusher',this);
+
+    this.ctx.start({
+      success: res => {
+        self.setData({
+          isPlaying: true
+        })
+      },
+      fail: res => {
+        console.log('start fail')
+      }
+    })
 
     let self = this;
     wx.getSystemInfo({ //得到窗口高度,这里必须要用到异步,而且要等到窗口bar显示后再去获取,所以要在onReady周期函数中使用获取窗口高度方法
@@ -180,12 +218,10 @@ Page({
         let LoginRandom = user.Login_random;
         let zcode = user.zcode;
 
-        console.log("action=getRoomNums&Loginrandom=" + LoginRandom + "&zcode=" + zcode)
         let interval = setInterval((res) => {
           app.post(API_URL, "action=getRoomNums&Loginrandom=" + LoginRandom + "&zcode=" + zcode, false, false, "").then((res) => {
-            console.log(res)
             let nums = res.data.data[0].nums;
-            console.log(nums)
+
             self.setData({
               nums:nums
             })
@@ -220,7 +256,6 @@ Page({
     let isPauseing = self.data.isPauseing;//是否是暂停中
 
     if (isPauseing){//如果暂停
-      console.log('恢复直播')
       this.ctx.resume({//恢复直播
         success: res => {
           self.setData({
@@ -233,7 +268,6 @@ Page({
         }
       })
     }else{
-      console.log('第一次开始')
       this.ctx.start({
         success: res => {
           self.setData({
@@ -265,7 +299,6 @@ Page({
   /**
    * 停止直播
    */
-
   stop: function () {
     let self = this;
     this.ctx.stop({

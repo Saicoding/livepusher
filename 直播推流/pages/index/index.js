@@ -1,4 +1,8 @@
 // pages/index/index.js
+let API_URL = "https://xcx2.chinaplat.com/laoxie/";
+let app = getApp();
+let hasInterval = false;//默认没有计时器
+
 Page({
 
   /**
@@ -19,7 +23,81 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
- 
+
+  },
+
+  /**
+   * 直播状态改变时
+   */
+
+  stateChange:function(e){
+    let code = e.detail.code;
+
+    switch(code){
+      case 1001:
+        this.setData({
+          prompt:"已经连接推流服务器"
+        })
+      break;
+      case 1002:
+        this.setData({
+          prompt: "已经与服务器握手完毕,开始推流"
+        })
+        break;
+      case 1003:
+        this.setData({
+          prompt: "打开摄像头成功"
+        })
+        break;
+      case 1004:
+        this.setData({
+          prompt: "录屏启动成功"
+        })
+        break;
+      case -1301:
+        this.setData({
+          prompt: "打开摄像头失败"
+        })
+        break;
+      case 1101:
+      case 1102:
+        this.setData({
+          prompt: "网络状况不佳"
+        })
+        break;
+      case -1308:
+        this.setData({
+          prompt: "开始录屏失败，可能是被用户拒绝"
+        })
+        break;
+      case -1308:
+        this.setData({
+          prompt: "开始录屏失败，可能是被用户拒绝"
+        })
+        break;
+      case 1006:
+      case 1005:
+        this.setData({
+          prompt: ""
+        })
+        break;
+        default:
+        this.setData({
+          prompt: code
+        })
+    }
+  },
+
+  /**
+   * 发生错误时
+   */
+  error:function(e){
+    let message = e.detailerrMsg;
+    let errorCode = e.detail.errorCode
+    this.setData({
+      errorCode: errorCode,
+      message: message
+    })
   },
 
   /** 
@@ -91,12 +169,29 @@ Page({
       let k = user.k;
       let zcode = user.zcode;
 
-      let id = k + zcode
+      let id = zcode+k
 
       self.setData({
         id: id
       })
 
+      if(!hasInterval){
+        hasInterval = true;
+        let LoginRandom = user.Login_random;
+        let zcode = user.zcode;
+
+        console.log("action=getRoomNums&Loginrandom=" + LoginRandom + "&zcode=" + zcode)
+        let interval = setInterval((res) => {
+          app.post(API_URL, "action=getRoomNums&Loginrandom=" + LoginRandom + "&zcode=" + zcode, false, false, "").then((res) => {
+            console.log(res)
+            let nums = res.data.data[0].nums;
+            console.log(nums)
+            self.setData({
+              nums:nums
+            })
+          })
+        }, 2000)
+      }
     } else {
       let url = encodeURIComponent('/pages/index/index');
 
@@ -269,4 +364,5 @@ Page({
       }
     })
   }
+  
 })

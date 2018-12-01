@@ -9,7 +9,10 @@ Page({
     whiteningLevel:0,
     show: true,
     showSet:false,
-    clarity:"RTC"
+    clarity:"RTC",
+    isPlaying:false,
+    isPauseing:false,//是否暂停中
+    isVoiceOn:true,//是否开启声音，默认开启
   },
 
   /**
@@ -61,15 +64,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-    this.ctx = wx.createLivePusherContext('pusher');
-    this.ctx.start({
-      success: res => {
-        console.log('start success')
-      },
-      fail: res => {
-        console.log('start fail')
-      }
-    })
+    this.ctx = wx.createLivePusherContext('pusher',this);
+
     let self = this;
     wx.getSystemInfo({ //得到窗口高度,这里必须要用到异步,而且要等到窗口bar显示后再去获取,所以要在onReady周期函数中使用获取窗口高度方法
       success: function(res) { //转换窗口高度
@@ -120,16 +116,72 @@ Page({
     })
   },
 
-  bindStart:function(){
-    this.ctx.start({
-      success: res => {
-        console.log('start success')
-      },
-      fail: res => {
-        console.log('start fail')
+  /**
+   * 开始直播或者恢复直播
+   */
+  
+  start:function(){
+    let self = this;
+    let isPauseing = self.data.isPauseing;//是否是暂停中
+
+    if (isPauseing){//如果暂停
+      console.log('恢复直播')
+      this.ctx.resume({//恢复直播
+        success: res => {
+          self.setData({
+            isPlaying: true,
+            isPauseing:false
+          })
+        },
+        fail: res => {
+          console.log('start fail')
+        }
+      })
+    }else{
+      console.log('第一次开始')
+      this.ctx.start({
+        success: res => {
+          self.setData({
+            isPlaying: true
+          })
+        },
+        fail: res => {
+          console.log('start fail')
+        }
+      })
+    }
+  },
+
+   /**
+    * 暂停直播
+    */
+  pause:function(){
+    let self = this;
+    this.ctx.pause({
+      success:res =>{
+        self.setData({
+          isPlaying: false,
+          isPauseing:true
+        })
       }
     })
   },
+
+  /**
+   * 停止直播
+   */
+
+  stop: function () {
+    let self = this;
+    this.ctx.stop({
+      success: res => {
+        self.setData({
+          isPlaying: false
+        })
+      }
+    })
+  },
+
   /**
    * 退出登录
    */
@@ -198,5 +250,23 @@ Page({
       })
     }
   },
+  /**
+   * 设置是否静音
+   */
+  setVoice:function(){
+    this.setData({
+      isVoiceOn:!this.data.isVoiceOn
+    })
+  },
 
+  /**
+   * 设置前后摄像头
+   */
+  setCamera:function(){
+    let self = this;
+    this.ctx.switchCamera({
+      success:function(){
+      }
+    })
+  }
 })

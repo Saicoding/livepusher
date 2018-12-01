@@ -137,7 +137,7 @@ live-player {
 .model, .model-opacity {
   position: absolute;
   width: 70rpx;
-  height: 200rpx;
+  height: 375rpx;
   font-size: 28rpx;
   bottom: 40rpx;
   color: white;
@@ -210,14 +210,17 @@ live-player {
   border:1px solid #ffc120;
 }
 
-.online-opacity{
+.online-opacity,.play-opacity{
   position: absolute;
   background: black;
   opacity: 0.3;
   width:70rpx;
   height:200rpx;
   border-radius: 70rpx;
-  margin-left:650rpx;
+}
+
+.online-opacity{
+  left:650rpx;
 }
 
 .online-image{
@@ -226,6 +229,30 @@ live-player {
   height:40rpx;
   transform: rotate(90deg);
   left:665rpx;
-  top:120rpx;
+  top:70rpx;
+}
+
+.online-text{
+  position: absolute;
+  width:140rpx;
+  height:40rpx;
+  left:615rpx;
+  top:170rpx;
+  color:white;
+  transform: rotate(90deg);
+  font-size:25rpx;
+  line-height: 40rpx;
+}
+
+.play-opacity{
+  background: black;
+  left:40rpx;
+}
+
+.control-img{
+  position: absolute;
+  width:50rpx;
+  height:50rpx;
+  left:50rpx;
 }
 

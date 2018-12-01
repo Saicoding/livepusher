@@ -1,12 +1,12 @@
 <!--pages/index/index.wxml-->
-<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" bindtap="bindStart" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0">
+<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0" enable-camera muted="{{isVoiceOn}}" device-position ="back">
   <!-- 控制条 -->
   <cover-view bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
     {{prompt}}
   </cover-view>
 
   <!-- 视频质量 -->
-  <cover-view wx:if="{{showSet}}" class="set-container-model" >
+  <cover-view wx:if="{{showSet}}" class="set-container-model">
   </cover-view>
 
   <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-460}}rpx;left:615rpx;">质量 :</cover-view>
@@ -49,6 +49,17 @@
     <cover-view bindtap="myset" class="set">
       <cover-image class="set-img" src="/imgs/set1.png" mode="aspectFit"></cover-image>
     </cover-view>
+
+    <!-- 翻转摄像头 -->
+    <cover-view bindtap="setCamera" class="back">
+      <cover-image class="back-img" src="/imgs/camera.png" mode="aspectFit"></cover-image>
+    </cover-view>
+
+    <!-- 静音 -->
+    <cover-view bindtap="setVoice" class="back">
+      <cover-image class="back-img" src="{{isVoiceOn?'/imgs/voice_off.png':'/imgs/voice_on.png'}}" mode="aspectFit"></cover-image>
+    </cover-view>
+
     <!-- 退出按钮 -->
     <cover-view bindtap="loginOut" class="back">
       <cover-image class="back-img" src="/imgs/back.png" mode="aspectFit"></cover-image>
@@ -58,10 +69,16 @@
   <!--  在线人数 -->
   <cover-view class="online-opacity"></cover-view>
 
-  <cover-image class="online-image" src = "/imgs/online.png" mode = "aspectFit"></cover-image>
+  <cover-image class="online-image" src="/imgs/online.png" mode="aspectFit"></cover-image>
 
-  <cover-view class ="online-text">12000</cover-view>
- 
+  <cover-view class="online-text">12000 人</cover-view>
 
+  <!-- 播放按钮 -->
+
+  <cover-view class="play-opacity" style="height:{{isPlaying?200:122}}rpx;"></cover-view>
+
+  <cover-image bindtap='start' wx:if="{{!isPlaying}}" src="/imgs/record.png" mode="aspectFit" class="control-img" style="top:75rpx;width:60rpx;height:60rpx;left:45rpx;"></cover-image>
+  <cover-image bindtap='pause' wx:if="{{isPlaying}}" src="/imgs/pause.png" mode="aspectFit" class="control-img" style="top:75rpx;transform:rotate(90deg)"></cover-image>
+  <cover-image bindtap='stop' wx:if="{{isPlaying}}" src="/imgs/stop.png" mode="aspectFit" class="control-img" style="top:160rpx;"></cover-image>
 
 </live-pusher>

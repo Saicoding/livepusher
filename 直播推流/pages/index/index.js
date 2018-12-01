@@ -225,7 +225,7 @@ Page({
             let nums = res.data.data[0].nums;
 
             self.setData({
-              nums: nums
+              nums: nums,
             })
           })
         }, 2000)

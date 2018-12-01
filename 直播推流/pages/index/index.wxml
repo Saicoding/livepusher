@@ -1,7 +1,7 @@
 <!--pages/index/index.wxml-->
-<live-pusher class="pusher" id="pusher" url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0" enable-camera muted="{{isVoiceOn}}" device-position ="back" bindstatechange = "stateChange"   zoom = "{{true}}" bindnetstatus="netstatus">
+<live-pusher  class="pusher" id="pusher"  url="rtmp://push01.chinaplat.com/live/{{id}}" mode="{{clarity}}" beauty="{{fairLevel}}" whiteness="{{whiteningLevel}}" binderror="error" style="height:{{windowHeight}}rpx;width:750rpx;left:0;top:0" enable-camera muted="{{isVoiceOn}}" device-position ="back" bindstatechange = "stateChange"   auto-focus  bindnetstatus="netstatus">
   <!-- 控制条 --> 
-  <cover-view wx:if="{{showModel}}" bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
+  <cover-view  bindtap='toogleShow'  class="fullScreen-control" style="height:500rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-500)/2-150}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
     {{prompt}}
   </cover-view>
 
@@ -51,8 +51,7 @@
 
   <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:10rpx;width:300rpx;text-align:left">发送/接收速度 :    {{netSpeed}}k/s</cover-view>
 
-  <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:-40rpx;width:300rpx;text-align:left">网络抖动 :    {{netJitter}}</cover-view>
-
+  <!-- <cover-view wx:if="{{showSet}}" class="set-text" style="top:{{windowHeight-290}}rpx;left:-40rpx;width:300rpx;text-align:left">网络抖动 :    {{netJitter}}</cover-view> -->
 
   <!--  蒙版 -->
   <cover-view wx:if="{{show}}" class="model-opacity"></cover-view>
@@ -70,7 +69,7 @@
 
     <!-- 静音 -->
     <cover-view bindtap="setVoice" class="back">
-      <cover-image class="back-img" src="{{isVoiceOn?'/imgs/voice_on.png':'/imgs/voice_off.png'}}" mode="aspectFit"></cover-image>
+      <cover-image class="back-img" src="{{isVoiceOn?'/imgs/voice_off.png':'/imgs/voice_on.png'}}" mode="aspectFit"></cover-image>
     </cover-view>
 
     <!-- 退出按钮 -->

@@ -131,7 +131,7 @@ live-player {
   margin-top: 120rpx;
   position: absolute;
   text-align: center;
-  line-height: 750rpx;
+  line-height: 500rpx;
 }
 
 .model, .model-opacity {

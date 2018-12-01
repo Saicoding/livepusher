@@ -329,6 +329,7 @@ Page({
    * 退出登录
    */
   loginOut: function() {
+    let self = this;
     wx.showModal({
       content: '您确定要退出登录吗？',
       confirmColor: '#0097f5',
@@ -336,6 +337,20 @@ Page({
         if (res.confirm) {
           let url = encodeURIComponent('/pages/mine/mineIndex/mineIndex');
           wx.removeStorageSync('user');
+
+          self.ctx.stop({
+            success: res => {
+              self.setData({
+                isPlaying: false,
+                isVoiceOn: true,
+                videoBitrate: 0,
+                audioBitrate: 0,
+                videoFPS: 0,
+                videoGOP: 0,
+                netSpeed: 0
+              })
+            }
+          })
 
           wx.removeStorage({
             key: 'user',

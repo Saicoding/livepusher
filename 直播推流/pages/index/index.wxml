@@ -83,7 +83,7 @@
 
   <cover-image class="online-image" src="/imgs/online.png" mode="aspectFit"></cover-image>
 
-  <cover-view class="online-text">{{nums}}人</cover-view>
+  <cover-view class="online-text">{{nums}}人{{test}}</cover-view>
 
   <!-- 播放按钮 -->
 

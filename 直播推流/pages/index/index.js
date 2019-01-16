@@ -256,6 +256,10 @@ Page({
     let self = this;
     let isPauseing = self.data.isPauseing; //是否是暂停中
 
+    this.setData({
+      test:"开始"
+    })
+
     if (isPauseing) { //如果暂停
       this.ctx.resume({ //恢复直播
         success: res => {
